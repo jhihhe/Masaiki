@@ -5,7 +5,7 @@
 **轻量级 macOS 图片打码工具 | Lightweight macOS Image Blur Tool**
 
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
-[![macOS](https://img.shields.io/badge/macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
+[![macOS](https://img.shields.io/badge/macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![Platform](https://img.shields.io/badge/Platform-macOS-blue.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
@@ -34,9 +34,6 @@
 | 💾 **覆盖保存** | 一键保存并覆盖原文件，自动保留原文件 `.original_backup` 备份 |
 | 📏 **文件大小控制** | JPEG 质量参数自动匹配，保存后文件大小差异控制在 5% 以内 |
 
-### 📸 界面预览
-
-![App Screenshot](assets/screenshot.png)
 
 ### 🚀 安装
 
