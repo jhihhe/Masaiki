@@ -6,10 +6,14 @@
 
 **轻量级 macOS 图片打码工具 | Lightweight macOS Image Blur Tool**
 
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaike)
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
+[![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![Platform](https://img.shields.io/badge/Platform-macOS-blue.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
+[![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaike)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
+[![Download](https://img.shields.io/badge/Download-Masaike.dmg-purple.svg?style=flat-square)](./Masaike.dmg)
 
 <p>
   <a href="#中文说明">中文说明</a> •
@@ -115,6 +119,28 @@ swiftc -sdk $SDK -o Masaike $(find Sources/Masaike -name "*.swift")
 ```
 
 > **Note**: The current build is x86_64 only. On Apple Silicon Macs, run it via Rosetta. For a native Apple Silicon or universal binary, rebuild with full Xcode installed.
+
+---
+
+## 更新日志 · Changelog
+
+### v1.0.0（2026-07-21）
+
+- 默认打码效果改为**高斯模糊**，强度默认 **100%**
+- 导入图片后**自动识别人脸并打码**，同时保留手动「自动识别人脸」按钮
+- 优化异步处理，提升批量导入时的 UI 流畅度
+- 修复高斯模糊坐标翻转导致的实时预览与保存异常
+- 修复单张文件与整个文件夹拖入导入失效的问题
+- 覆盖保存时自动生成 `*.original_backup.*` 备份
+
+### v1.0.0（2026-07-21）
+
+- Default blur is now **Gaussian Blur** at **100%** intensity
+- **Auto face detection on import**; manual re-detect button remains available
+- Async processing optimized for smoother batch imports
+- Fixed Gaussian blur coordinate flip affecting live preview and save
+- Fixed drag-and-drop import for both single files and entire folders
+- Automatic `*.original_backup.*` backup when overwriting originals
 
 ---
 
