@@ -18,11 +18,37 @@ final class AppViewModel: ObservableObject {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = true
         panel.canChooseFiles = true
-        panel.canChooseDirectories = false
+        panel.canChooseDirectories = true
         panel.allowedContentTypes = [.jpeg, .png, .heic, .tiff, .image]
 
         guard panel.runModal() == .OK else { return }
-        loadImages(from: panel.urls)
+        handleDroppedURLs(panel.urls)
+    }
+
+    func handleDroppedURLs(_ urls: [URL]) {
+        var imageURLs: [URL] = []
+        let allowedExtensions = Set(["jpg", "jpeg", "png", "heic", "tiff", "tif", "bmp", "gif"])
+
+        for url in urls {
+            var isDirectory: ObjCBool = false
+            FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory)
+
+            if isDirectory.boolValue {
+                if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) {
+                    for case let fileURL as URL in enumerator {
+                        if allowedExtensions.contains(fileURL.pathExtension.lowercased()) {
+                            imageURLs.append(fileURL)
+                        }
+                    }
+                }
+            } else {
+                if allowedExtensions.contains(url.pathExtension.lowercased()) {
+                    imageURLs.append(url)
+                }
+            }
+        }
+
+        loadImages(from: imageURLs)
     }
 
     func loadImages(from urls: [URL]) {

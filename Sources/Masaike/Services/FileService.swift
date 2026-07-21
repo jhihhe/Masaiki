@@ -48,7 +48,8 @@ final class FileService {
     }
 
     func save(_ ciImage: CIImage, over url: URL, originalFileSize: Int, originalProperties: [String: Any], utType: String) async throws -> Int {
-        let backupURL = url.appendingPathExtension("original_backup")
+        let ext = url.pathExtension
+        let backupURL = url.deletingPathExtension().appendingPathExtension("original_backup" + (ext.isEmpty ? "" : ".\(ext)"))
 
         // Create backup if not exists
         if !FileManager.default.fileExists(atPath: backupURL.path) {

@@ -1,7 +1,9 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @StateObject private var viewModel = AppViewModel()
+    @State private var isDropTarget = false
 
     var body: some View {
         NavigationSplitView {
@@ -21,6 +23,33 @@ struct ContentView: View {
             }
         }
         .navigationTitle("马赛克工具")
+        .onDrop(of: [.fileURL], isTargeted: $isDropTarget) { providers in
+            handleDroppedProviders(providers)
+            return true
+        }
+    }
+
+    private func handleDroppedProviders(_ providers: [NSItemProvider]) {
+        var urls: [URL] = []
+        let group = DispatchGroup()
+
+        for provider in providers {
+            group.enter()
+            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
+                defer { group.leave() }
+                if let url = item as? URL {
+                    urls.append(url)
+                } else if let data = item as? Data,
+                          let string = String(data: data, encoding: .utf8),
+                          let url = URL(string: string) {
+                    urls.append(url)
+                }
+            }
+        }
+
+        group.notify(queue: .main) {
+            viewModel.handleDroppedURLs(urls)
+        }
     }
 }
 

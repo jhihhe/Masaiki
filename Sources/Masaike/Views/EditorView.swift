@@ -50,7 +50,7 @@ struct EditorView: View {
                     ZStack(alignment: .topTrailing) {
                         Rectangle()
                             .stroke(region.type == .mosaic ? Color.yellow : Color.cyan, lineWidth: 2)
-                            .background((region.type == .mosaic ? Color.yellow : Color.cyan).opacity(0.12))
+                            .background((region.type == .mosaic ? Color.yellow : Color.cyan).opacity(0.04))
 
                         Button(action: { viewModel.removeRegion(region, from: item) }) {
                             Image(systemName: "xmark.circle.fill")

@@ -21,7 +21,15 @@ final class ImageProcessingService {
     }
 
     private func apply(region: BlurRegion, to image: CIImage) -> CIImage {
-        let rect = region.rect.intersection(image.extent)
+        // BlurRegion coordinates are in top-left origin (display/UI space).
+        // Core Image uses bottom-left origin, so we flip the Y axis.
+        let flippedRect = CGRect(
+            x: region.rect.origin.x,
+            y: image.extent.height - region.rect.origin.y - region.rect.height,
+            width: region.rect.width,
+            height: region.rect.height
+        )
+        let rect = flippedRect.intersection(image.extent)
         guard !rect.isEmpty else { return image }
 
         let cropped = image.cropped(to: rect)
@@ -34,10 +42,11 @@ final class ImageProcessingService {
             blurred = applyGaussianBlur(to: cropped, intensity: region.intensity)
         }
 
-        // Gaussian blur expands the image; crop back to region size and translate to original position
-        let croppedBlurred = blurred.cropped(to: CGRect(origin: .zero, size: rect.size))
-        let translated = croppedBlurred.transformed(by: CGAffineTransform(translationX: rect.origin.x, y: rect.origin.y))
-        return translated.composited(over: image)
+        // Gaussian blur expands the image; crop back to the original region extent.
+        // cropped(to:) uses absolute coordinates, so we crop to `rect` itself,
+        // which already places the result at the correct location when composited.
+        let croppedBlurred = blurred.cropped(to: rect)
+        return croppedBlurred.composited(over: image)
     }
 
     private func applyMosaic(to image: CIImage, intensity: Double) -> CIImage {
