@@ -61,6 +61,13 @@ flowchart LR
 4. **应用打码效果**：根据当前设置选择高斯模糊或马赛克，并通过 Core Image 合成到原图上。
 5. **覆盖保存**：处理后的图片直接覆盖原文件，同时生成 `*.original_backup.*` 备份。
 
+### 官方文档
+
+- [Vision 框架总览](https://developer.apple.com/documentation/vision/)
+- [VNDetectFaceRectanglesRequest](https://developer.apple.com/documentation/vision/vndetectfacerectanglesrequest)
+- [DetectFaceRectanglesRequest（新版 Swift API）](https://developer.apple.com/documentation/vision/detectfacerectanglesrequest)
+- [官方示例：Analyzing a selfie and visualizing its content](https://developer.apple.com/documentation/vision/analyzing-a-selfie-and-visualizing-its-content)
+
 ## 安装
 
 1. 下载最新版 `Masaike.dmg`

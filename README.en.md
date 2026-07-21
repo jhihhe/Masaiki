@@ -61,6 +61,13 @@ flowchart LR
 4. **Apply Blur Effect**: Gaussian blur or mosaic is applied according to the current setting and composited onto the original image using Core Image.
 5. **Overwrite Save**: The processed image replaces the original, while a `*.original_backup.*` copy is created automatically.
 
+### References
+
+- [Vision Framework](https://developer.apple.com/documentation/vision/)
+- [VNDetectFaceRectanglesRequest](https://developer.apple.com/documentation/vision/vndetectfacerectanglesrequest)
+- [DetectFaceRectanglesRequest (modern Swift API)](https://developer.apple.com/documentation/vision/detectfacerectanglesrequest)
+- [Sample Code: Analyzing a selfie and visualizing its content](https://developer.apple.com/documentation/vision/analyzing-a-selfie-and-visualizing-its-content)
+
 ## Installation
 
 1. Download the latest `Masaike.dmg`
