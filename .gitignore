@@ -31,3 +31,6 @@ Package.resolved
 # Test outputs
 test_save.swift
 test_save
+
+# Compiled executable binary
+/Masaike

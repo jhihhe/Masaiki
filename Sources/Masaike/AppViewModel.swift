@@ -7,8 +7,8 @@ import Combine
 final class AppViewModel: ObservableObject {
     @Published var items: [ImageItem] = []
     @Published var selectedItemID: UUID?
-    @Published var currentBlurType: BlurType = .mosaic
-    @Published var currentIntensity: Double = 0.5
+    @Published var currentBlurType: BlurType = .gaussian
+    @Published var currentIntensity: Double = 1.0
 
     var selectedItem: ImageItem? {
         items.first { $0.id == selectedItemID }
@@ -53,6 +53,7 @@ final class AppViewModel: ObservableObject {
 
     func loadImages(from urls: [URL]) {
         Task {
+            var newItems: [ImageItem] = []
             for url in urls {
                 do {
                     let loaded = try FileService.shared.loadImage(from: url)
@@ -64,6 +65,7 @@ final class AppViewModel: ObservableObject {
                         originalUTType: loaded.utType
                     )
                     items.append(item)
+                    newItems.append(item)
                     if selectedItemID == nil {
                         selectedItemID = item.id
                     }
@@ -71,33 +73,44 @@ final class AppViewModel: ObservableObject {
                     print("Failed to load \(url): \(error)")
                 }
             }
+
+            // Automatically detect faces for imported images sequentially to keep UI smooth
+            for item in newItems {
+                await detectFacesAsync(for: item)
+            }
         }
     }
 
     func autoDetectFaces(for item: ImageItem) {
-        guard !item.isProcessing else { return }
-        item.isProcessing = true
-        item.errorMessage = nil
-
         Task {
-            do {
-                let faces = try await FaceDetectionService.shared.detectFaces(in: item.originalImage)
-                await MainActor.run {
-                    for face in faces {
-                        let expanded = face.insetBy(dx: -face.width * 0.1, dy: -face.height * 0.1)
-                        item.regions.append(BlurRegion(
-                            rect: expanded,
-                            type: currentBlurType,
-                            intensity: currentIntensity
-                        ))
-                    }
-                    item.isProcessing = false
+            await detectFacesAsync(for: item)
+        }
+    }
+
+    private func detectFacesAsync(for item: ImageItem) async {
+        guard !item.isProcessing else { return }
+        await MainActor.run {
+            item.isProcessing = true
+            item.errorMessage = nil
+        }
+
+        do {
+            let faces = try await FaceDetectionService.shared.detectFaces(in: item.originalImage)
+            await MainActor.run {
+                for face in faces {
+                    let expanded = face.insetBy(dx: -face.width * 0.1, dy: -face.height * 0.1)
+                    item.regions.append(BlurRegion(
+                        rect: expanded,
+                        type: currentBlurType,
+                        intensity: currentIntensity
+                    ))
                 }
-            } catch {
-                await MainActor.run {
-                    item.errorMessage = "人脸识别失败: \(error.localizedDescription)"
-                    item.isProcessing = false
-                }
+                item.isProcessing = false
+            }
+        } catch {
+            await MainActor.run {
+                item.errorMessage = "人脸识别失败: \(error.localizedDescription)"
+                item.isProcessing = false
             }
         }
     }
