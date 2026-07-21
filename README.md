@@ -8,180 +8,20 @@
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
-[![Platform](https://img.shields.io/badge/Platform-macOS-blue.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaike)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 [![Download](https://img.shields.io/badge/Download-Masaike.dmg-purple.svg?style=flat-square)](./Masaike.dmg)
 
 <p>
-  <a href="#中文说明">中文说明</a> •
-  <a href="#english">English</a> •
-  <a href="#安装--install">安装</a> •
-  <a href="#使用--usage">使用</a> •
-  <a href="#构建--build">构建</a>
+  <a href="README.zh.md">🇨🇳 中文说明</a> •
+  <a href="README.en.md">🇺🇸 English</a>
 </p>
 
 </div>
 
 ---
 
-## 中文说明
+Please choose your language / 请选择语言：
 
-### ✨ 功能特性
-
-| 功能 | 描述 |
-|------|------|
-| 📁 **批量导入** | 一次性导入多张 JPG / PNG / HEIC / TIFF 图片，支持拖拽文件或文件夹 |
-| 😊 **自动人脸识别** | 基于 Apple Vision 框架，一键检测并打码人脸区域 |
-| 🎨 **两种打码效果** | 马赛克（Mosaic）与高斯模糊（Gaussian Blur） |
-| 🖱️ **框选打码** | 拖拽矩形框选区域，实时预览覆盖式打码效果 |
-| 💾 **覆盖保存** | 一键保存并覆盖原文件，自动保留 `photo.jpg.original_backup.jpg` 备份 |
-| 📏 **文件大小控制** | JPEG 质量参数自动匹配，保存后文件大小差异控制在 5% 以内 |
-
-### 📸 界面预览
-
-![App Screenshot](assets/screenshot.png)
-
-### 🚀 安装
-
-1. 下载最新版 `Masaike.dmg`
-2. 双击挂载 DMG，将「马赛克工具」拖入「应用程序」文件夹
-3. 首次运行时若提示「无法打开」，请前往 **系统设置 → 隐私与安全性** 点击「仍要打开」
-
-### 📝 使用说明
-
-1. 点击左侧「导入图片」、直接将图片/文件夹拖入应用，或使用工具栏导入按钮
-2. 选中需要处理的图片
-3. 选择打码效果（马赛克 / 高斯模糊）与强度
-4. 点击「自动识别人脸」或在图片上拖拽框选手动打码
-5. 点击「保存当前」或「全部保存」覆盖原文件
-
-### 🛠 从源码构建
-
-```bash
-# 克隆仓库
-git clone https://github.com/jhihhe/masaike.git
-cd masaike
-
-# 编译可执行文件
-SDK=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-swiftc -sdk $SDK -o Masaike $(find Sources/Masaike -name "*.swift")
-
-# 打包成 .app（已包含在仓库脚本中）
-# 详见 Package.swift 与 Masaike.app/Contents/Info.plist
-```
-
-> **注意**：当前构建环境为 Intel Mac（x86_64），在 Apple Silicon 设备上需通过 Rosetta 运行。如需原生 Apple Silicon 版本，请在装有完整 Xcode 的环境下重新构建。
-
----
-
-## English
-
-### ✨ Features
-
-| Feature | Description |
-|---------|-------------|
-| 📁 **Batch Import** | Import multiple JPG / PNG / HEIC / TIFF images at once, with drag-and-drop support for files and folders |
-| 😊 **Auto Face Detection** | One-click face detection and blurring powered by Apple Vision |
-| 🎨 **Two Blur Modes** | Mosaic pixelation and Gaussian blur |
-| 🖱️ **Rectangle Selection** | Drag to draw blur regions with real-time preview |
-| 💾 **Overwrite Save** | Save directly over the original file with automatic `photo.jpg.original_backup.jpg` backup |
-| 📏 **Size Preservation** | JPEG quality auto-matched to keep file size difference within 5% |
-
-### 📸 Screenshot
-
-![App Screenshot](assets/screenshot.png)
-
-### 🚀 Installation
-
-1. Download the latest `Masaike.dmg`
-2. Mount the DMG and drag "Masaike" into your **Applications** folder
-3. If macOS warns "cannot be opened", go to **System Settings → Privacy & Security** and click **Open Anyway**
-
-### 📝 Usage
-
-1. Click "Import Images", drag images/folders into the app, or use the toolbar import button
-2. Select the image you want to edit
-3. Choose blur type (Mosaic / Gaussian Blur) and intensity
-4. Click "Auto Detect Faces" or drag to draw manual blur regions
-5. Click "Save Current" or "Save All" to overwrite originals
-
-### 🛠 Build from Source
-
-```bash
-git clone https://github.com/jhihhe/masaike.git
-cd masaike
-
-SDK=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-swiftc -sdk $SDK -o Masaike $(find Sources/Masaike -name "*.swift")
-```
-
-> **Note**: The current build is x86_64 only. On Apple Silicon Macs, run it via Rosetta. For a native Apple Silicon or universal binary, rebuild with full Xcode installed.
-
----
-
-## 更新日志 · Changelog
-
-### v1.0.0（2026-07-21）
-
-- 默认打码效果改为**高斯模糊**，强度默认 **100%**
-- 导入图片后**自动识别人脸并打码**，同时保留手动「自动识别人脸」按钮
-- 优化异步处理，提升批量导入时的 UI 流畅度
-- 修复高斯模糊坐标翻转导致的实时预览与保存异常
-- 修复单张文件与整个文件夹拖入导入失效的问题
-- 修复关闭窗口后 Dock 仍显示运行小白点的问题
-- 覆盖保存时自动生成 `*.original_backup.*` 备份
-
-### v1.0.0（2026-07-21）
-
-- Default blur is now **Gaussian Blur** at **100%** intensity
-- **Auto face detection on import**; manual re-detect button remains available
-- Async processing optimized for smoother batch imports
-- Fixed Gaussian blur coordinate flip affecting live preview and save
-- Fixed drag-and-drop import for both single files and entire folders
-- Fixed Dock running indicator remaining after closing the window
-- Automatic `*.original_backup.*` backup when overwriting originals
-
----
-
-## 技术架构 · Architecture
-
-```
-┌─────────────────────────────────────────┐
-│           SwiftUI User Interface        │
-│  (ImageListView · EditorView · Toolbar) │
-└─────────────────────────────────────────┘
-                    │
-┌─────────────────────────────────────────┐
-│           AppViewModel                  │
-│   (State · Import · Save · Coordination)│
-└─────────────────────────────────────────┘
-        │           │           │
-   ┌────┘      ┌────┘      ┌────┘
-   ▼           ▼           ▼
-Vision      Core Image    ImageIO
-Face Detect  Mosaic/Blur   JPEG/PNG Save
-```
-
-### 核心依赖 · Core Dependencies
-
-- **SwiftUI** — 原生 macOS 用户界面
-- **Vision** — 人脸检测（`VNDetectFaceRectanglesRequest`）
-- **Core Image** — 马赛克与高斯模糊滤镜
-- **ImageIO / UniformTypeIdentifiers** — 图片元数据与格式保持
-
----
-
-## 免责声明 · Disclaimer
-
-本工具会直接覆盖原文件，请在操作前确认已备份重要图片。保存前会自动生成 `*.original_backup.*` 备份文件，但仍建议用户自行保留原始副本。
-
-This tool overwrites original files. Please make sure you have backups of important images before saving. An `*.original_backup.*` file is created automatically, but keeping your own copy is recommended.
-
----
-
-<div align="center">
-
-Made with ❤️ for macOS
-
-</div>
+- **[中文说明](README.zh.md)**
+- **[English README](README.en.md)**
