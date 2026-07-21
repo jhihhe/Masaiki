@@ -1,7 +1,5 @@
 <div align="center">
 
-![Masaike Banner](assets/banner.png)
-
 # 马赛克工具 · Masaike
 
 **轻量级 macOS 图片打码工具 | Lightweight macOS Image Blur Tool**
