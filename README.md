@@ -129,6 +129,7 @@ swiftc -sdk $SDK -o Masaike $(find Sources/Masaike -name "*.swift")
 - 优化异步处理，提升批量导入时的 UI 流畅度
 - 修复高斯模糊坐标翻转导致的实时预览与保存异常
 - 修复单张文件与整个文件夹拖入导入失效的问题
+- 修复关闭窗口后 Dock 仍显示运行小白点的问题
 - 覆盖保存时自动生成 `*.original_backup.*` 备份
 
 ### v1.0.0（2026-07-21）
@@ -138,6 +139,7 @@ swiftc -sdk $SDK -o Masaike $(find Sources/Masaike -name "*.swift")
 - Async processing optimized for smoother batch imports
 - Fixed Gaussian blur coordinate flip affecting live preview and save
 - Fixed drag-and-drop import for both single files and entire folders
+- Fixed Dock running indicator remaining after closing the window
 - Automatic `*.original_backup.*` backup when overwriting originals
 
 ---
