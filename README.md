@@ -5,7 +5,6 @@
 **轻量级 macOS 图片打码工具 | Lightweight macOS Image Blur Tool**
 
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
-[![macOS](https://img.shields.io/badge/macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12🔍搜 macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![Platform](https://img.shields.io/badge/Platform-macOS-blue.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
