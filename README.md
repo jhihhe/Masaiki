@@ -4,7 +4,7 @@
 
 **轻量级 macOS 图片打码工具**
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
@@ -102,6 +102,12 @@ swiftc -sdk $SDK -o Masaiki $(find Sources/Masaiki -name "*.swift")
 ---
 
 ## 更新日志
+
+### v1.1.0（2026-07-22）
+
+- 拖入新图片后自动切换到最后一张预览
+- 「保存当前」/「全部保存」跳过无打码记录图片，并提示已保存/跳过数量
+- 取消 backup 文件生成，改为原子写入直接覆盖原文件
 
 ### v1.0.0（2026-07-21）
 

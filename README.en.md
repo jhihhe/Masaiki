@@ -4,7 +4,7 @@
 
 **Lightweight macOS Image Blur Tool**
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
@@ -97,6 +97,12 @@ swiftc -sdk $SDK -o Masaiki $(find Sources/Masaiki -name "*.swift")
 ---
 
 ## Changelog
+
+### v1.1.0 (2026-07-22)
+
+- Auto-switch preview to the last imported/dropped image
+- "Save Current" / "Save All" skip images without blur regions and show saved/skipped counts
+- Remove backup generation; use atomic overwrite via temp file + replaceItem
 
 ### v1.0.0（2026-07-21）
 
