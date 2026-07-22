@@ -1,16 +1,16 @@
 <div align="center">
 
-# 马赛克工具 · Masaike
+# 马赛克工具 · Masaiki
 
 **轻量级 macOS 图片打码工具**
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaike)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
-[![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaike)
+[![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
-[![Download](https://img.shields.io/badge/Download-Masaike.dmg-purple.svg?style=flat-square)](./Masaike.dmg)
+[![Download](https://img.shields.io/badge/Download-Masaiki.dmg-purple.svg?style=flat-square)](./Masaiki.dmg)
 
 <p>
   <a href="README.en.md">English</a> •
@@ -42,7 +42,7 @@
 
 ## Apple Vision 人脸识别流程
 
-Masaike 使用 Apple Vision 的 `VNDetectFaceRectanglesRequest` 自动定位图片中的人脸，并将其转换为打码区域。
+Masaiki 使用 Apple Vision 的 `VNDetectFaceRectanglesRequest` 自动定位图片中的人脸，并将其转换为打码区域。
 
 ```mermaid
 flowchart LR
@@ -70,7 +70,7 @@ flowchart LR
 
 ## 安装
 
-1. 下载最新版 `Masaike.dmg`
+1. 下载最新版 `Masaiki.dmg`
 2. 双击挂载 DMG，将「马赛克工具」拖入「应用程序」文件夹
 3. 首次运行时若提示「无法打开」，请前往 **系统设置 → 隐私与安全性** 点击「仍要打开」
 
@@ -86,15 +86,15 @@ flowchart LR
 
 ```bash
 # 克隆仓库
-git clone https://github.com/jhihhe/masaike.git
-cd masaike
+git clone https://github.com/jhihhe/masaiki.git
+cd masaiki
 
 # 编译可执行文件
 SDK=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-swiftc -sdk $SDK -o Masaike $(find Sources/Masaike -name "*.swift")
+swiftc -sdk $SDK -o Masaiki $(find Sources/Masaiki -name "*.swift")
 
 # 打包成 .app（已包含在仓库脚本中）
-# 详见 Package.swift 与 Masaike.app/Contents/Info.plist
+# 详见 Package.swift 与 Masaiki.app/Contents/Info.plist
 ```
 
 > **注意**：当前构建环境为 Intel Mac（x86_64），在 Apple Silicon 设备上需通过 Rosetta 运行。如需原生 Apple Silicon 版本，请在装有完整 Xcode 的环境下重新构建。

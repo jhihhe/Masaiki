@@ -8,7 +8,7 @@ final class FileService {
     static let shared = FileService()
     private let context = CIContext(options: [
         .cacheIntermediates: false,
-        .name: "MasaikeSaveContext"
+        .name: "MasaikiSaveContext"
     ])
 
     private init() {}

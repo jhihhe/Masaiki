@@ -7,7 +7,7 @@ final class ImageProcessingService {
     static let shared = ImageProcessingService()
     private let context = CIContext(options: [
         .cacheIntermediates: false,
-        .name: "MasaikeProcessingContext"
+        .name: "MasaikiProcessingContext"
     ])
 
     private init() {}

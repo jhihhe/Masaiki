@@ -2,15 +2,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Masaike",
+    name: "Masaiki",
     platforms: [
         .macOS(.v12)
     ],
     dependencies: [],
     targets: [
         .executableTarget(
-            name: "Masaike",
-            path: "Sources/Masaike",
+            name: "Masaiki",
+            path: "Sources/Masaiki",
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]

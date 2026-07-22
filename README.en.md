@@ -1,16 +1,16 @@
 <div align="center">
 
-# Masaike · 马赛克工具
+# Masaiki · 马赛克工具
 
 **Lightweight macOS Image Blur Tool**
 
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaike)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
 [![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
-[![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaike)
+[![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
-[![Download](https://img.shields.io/badge/Download-Masaike.dmg-purple.svg?style=flat-square)](./Masaike.dmg)
+[![Download](https://img.shields.io/badge/Download-Masaiki.dmg-purple.svg?style=flat-square)](./Masaiki.dmg)
 
 <p>
   <a href="README.zh.md">中文</a> •
@@ -42,7 +42,7 @@
 
 ## Apple Vision Face Detection Flow
 
-Masaike uses Apple Vision's `VNDetectFaceRectanglesRequest` to automatically locate faces in an image and convert them into blur regions.
+Masaiki uses Apple Vision's `VNDetectFaceRectanglesRequest` to automatically locate faces in an image and convert them into blur regions.
 
 ```mermaid
 flowchart LR
@@ -70,8 +70,8 @@ flowchart LR
 
 ## Installation
 
-1. Download the latest `Masaike.dmg`
-2. Mount the DMG and drag "Masaike" into your **Applications** folder
+1. Download the latest `Masaiki.dmg`
+2. Mount the DMG and drag "Masaiki" into your **Applications** folder
 3. If macOS warns "cannot be opened", go to **System Settings → Privacy & Security** and click **Open Anyway**
 
 ## Usage
@@ -85,11 +85,11 @@ flowchart LR
 ## Build from Source
 
 ```bash
-git clone https://github.com/jhihhe/masaike.git
-cd masaike
+git clone https://github.com/jhihhe/masaiki.git
+cd masaiki
 
 SDK=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-swiftc -sdk $SDK -o Masaike $(find Sources/Masaike -name "*.swift")
+swiftc -sdk $SDK -o Masaiki $(find Sources/Masaiki -name "*.swift")
 ```
 
 > **Note**: The current build is x86_64 only. On Apple Silicon Macs, run it via Rosetta. For a native Apple Silicon or universal binary, rebuild with full Xcode installed.
