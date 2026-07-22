@@ -48,15 +48,6 @@ final class FileService {
     }
 
     func save(_ ciImage: CIImage, over url: URL, originalFileSize: Int, originalProperties: [String: Any], utType: String) async throws -> Int {
-        let ext = url.pathExtension
-        let backupURL = url.deletingPathExtension().appendingPathExtension("original_backup" + (ext.isEmpty ? "" : ".\(ext)"))
-
-        // Create backup if not exists
-        if !FileManager.default.fileExists(atPath: backupURL.path) {
-            try? FileManager.default.removeItem(at: backupURL)
-            try FileManager.default.copyItem(at: url, to: backupURL)
-        }
-
         let finalData = try encodeImage(
             ciImage,
             utType: utType,
@@ -64,7 +55,24 @@ final class FileService {
             targetFileSize: originalFileSize
         )
 
-        try finalData.write(to: url, options: .atomic)
+        // Atomic overwrite: write to a temporary file in the same directory, then exchange.
+        let tempURL = url.deletingLastPathComponent().appendingPathComponent(url.lastPathComponent + ".tmp")
+        try finalData.write(to: tempURL, options: .atomic)
+
+        do {
+            var resultingURL: NSURL?
+            _ = try FileManager.default.replaceItem(
+                at: url,
+                withItemAt: tempURL,
+                backupItemName: nil,
+                options: [.usingNewMetadataOnly],
+                resultingItemURL: &resultingURL
+            )
+        } catch {
+            try? FileManager.default.removeItem(at: tempURL)
+            throw error
+        }
+
         return finalData.count
     }
 

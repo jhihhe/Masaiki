@@ -33,7 +33,7 @@
 | 😊 **Auto Face Detection** | One-click face detection and blurring powered by Apple Vision |
 | 🎨 **Two Blur Modes** | Mosaic pixelation and Gaussian blur |
 | 🖱️ **Rectangle Selection** | Drag to draw blur regions with real-time preview |
-| 💾 **Overwrite Save** | Save directly over the original file with automatic `photo.jpg.original_backup.jpg` backup |
+| 💾 **Overwrite Save** | Save directly over the original file; images without blur regions are skipped |
 | 📏 **Size Preservation** | JPEG quality auto-matched to keep file size difference within 5% |
 
 ## Screenshot
@@ -59,7 +59,7 @@ flowchart LR
 2. **Apple Vision Face Detection**: `VNDetectFaceRectanglesRequest` analyzes the image and returns a bounding box for each face.
 3. **Region Expansion**: The detected bounding box is expanded by about 10% to cover the full face.
 4. **Apply Blur Effect**: Gaussian blur or mosaic is applied according to the current setting and composited onto the original image using Core Image.
-5. **Overwrite Save**: The processed image replaces the original, while a `*.original_backup.*` copy is created automatically.
+5. **Overwrite Save**: The processed image replaces the original; images without blur regions are skipped.
 
 ### References
 
@@ -106,7 +106,7 @@ swiftc -sdk $SDK -o Masaiki $(find Sources/Masaiki -name "*.swift")
 - Fixed Gaussian blur coordinate flip affecting live preview and save
 - Fixed drag-and-drop import for both single files and entire folders
 - Fixed Dock running indicator remaining after closing the window
-- Automatic `*.original_backup.*` backup when overwriting originals
+- Automatically skip images without blur regions and report saved/skipped counts
 
 ---
 
@@ -140,7 +140,7 @@ Face Detect  Mosaic/Blur   JPEG/PNG Save
 
 ## Disclaimer
 
-This tool overwrites original files. Please make sure you have backups of important images before saving. An `*.original_backup.*` file is created automatically, but keeping your own copy is recommended.
+This tool overwrites original files. Please make sure you have your own backups of important images before saving.
 
 ---
 

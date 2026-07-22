@@ -9,9 +9,16 @@ final class AppViewModel: ObservableObject {
     @Published var selectedItemID: UUID?
     @Published var currentBlurType: BlurType = .gaussian
     @Published var currentIntensity: Double = 1.0
+    @Published var saveResult: SaveResult?
 
     var selectedItem: ImageItem? {
         items.first { $0.id == selectedItemID }
+    }
+
+    struct SaveResult: Identifiable {
+        let id = UUID()
+        let saved: Int
+        let skipped: Int
     }
 
     func importImages() {
@@ -66,12 +73,14 @@ final class AppViewModel: ObservableObject {
                     )
                     items.append(item)
                     newItems.append(item)
-                    if selectedItemID == nil {
-                        selectedItemID = item.id
-                    }
                 } catch {
                     print("Failed to load \(url): \(error)")
                 }
+            }
+
+            // Switch preview to the last newly imported image immediately
+            if let latest = newItems.last {
+                selectedItemID = latest.id
             }
 
             // Automatically detect faces for imported images sequentially to keep UI smooth
@@ -116,38 +125,60 @@ final class AppViewModel: ObservableObject {
     }
 
     func save(item: ImageItem) {
-        guard !item.isProcessing else { return }
-        item.isProcessing = true
-        item.errorMessage = nil
-
+        guard !item.regions.isEmpty else { return }
         Task {
-            do {
-                let newSize = try await FileService.shared.save(
-                    item.processedImage,
-                    over: item.url,
-                    originalFileSize: item.originalFileSize,
-                    originalProperties: item.originalProperties,
-                    utType: item.originalUTType
-                )
-                await MainActor.run {
-                    item.isProcessing = false
-                    let diff = abs(Double(newSize) / Double(item.originalFileSize) - 1.0)
-                    if diff > 0.05 {
-                        item.errorMessage = "已保存，但文件大小差异 \(String(format: "%.1f", diff * 100))%"
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    item.errorMessage = "保存失败: \(error.localizedDescription)"
-                    item.isProcessing = false
-                }
-            }
+            await saveItemAsync(item)
         }
     }
 
     func saveAll() {
-        for item in items {
-            save(item: item)
+        Task {
+            var saved = 0
+            var skipped = 0
+            for item in items {
+                if item.regions.isEmpty {
+                    skipped += 1
+                    continue
+                }
+                if await saveItemAsync(item) {
+                    saved += 1
+                }
+            }
+            await MainActor.run {
+                saveResult = SaveResult(saved: saved, skipped: skipped)
+            }
+        }
+    }
+
+    private func saveItemAsync(_ item: ImageItem) async -> Bool {
+        guard !item.isProcessing else { return false }
+        await MainActor.run {
+            item.isProcessing = true
+            item.errorMessage = nil
+        }
+
+        do {
+            let newSize = try await FileService.shared.save(
+                item.processedImage,
+                over: item.url,
+                originalFileSize: item.originalFileSize,
+                originalProperties: item.originalProperties,
+                utType: item.originalUTType
+            )
+            await MainActor.run {
+                item.isProcessing = false
+                let diff = abs(Double(newSize) / Double(item.originalFileSize) - 1.0)
+                if diff > 0.05 {
+                    item.errorMessage = "已保存，但文件大小差异 \(String(format: "%.1f", diff * 100))%"
+                }
+            }
+            return true
+        } catch {
+            await MainActor.run {
+                item.errorMessage = "保存失败: \(error.localizedDescription)"
+                item.isProcessing = false
+            }
+            return false
         }
     }
 

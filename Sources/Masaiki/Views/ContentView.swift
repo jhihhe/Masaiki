@@ -23,6 +23,13 @@ struct ContentView: View {
             }
         }
         .navigationTitle("马赛克工具")
+        .alert(item: $viewModel.saveResult) { result in
+            Alert(
+                title: Text("保存完成"),
+                message: Text("已保存 \(result.saved) 张图片，跳过 \(result.skipped) 张未打码图片。"),
+                dismissButton: .default(Text("确定"))
+            )
+        }
         .onDrop(of: [.fileURL], isTargeted: $isDropTarget) { providers in
             handleDroppedProviders(providers)
             return true
