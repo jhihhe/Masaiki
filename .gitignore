@@ -22,8 +22,11 @@ Package.resolved
 # App bundles and distribution
 *.app
 *.dmg
-!Masaiki.dmg
 *.pkg
+*.apk
+*.aab
+*.ipa
+dist/
 
 # Test outputs
 test_save.swift
