@@ -31,3 +31,4 @@ test_save
 
 # Compiled executable binary
 /Masaiki
+android/.gradle/

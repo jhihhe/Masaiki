@@ -3,166 +3,95 @@ import AppKit
 import CoreImage
 import ImageIO
 import UniformTypeIdentifiers
+import MasaikiCore
 
+/// macOS file service: sandbox-aware. All user file access goes through
+/// user-selected URLs (NSOpenPanel / NSSavePanel) which are automatically
+/// granted temporary read/write permission via the `user-selected` entitlement.
 final class FileService {
     static let shared = FileService()
-    private let context = CIContext(options: [
-        .cacheIntermediates: false,
-        .name: "MasaikiSaveContext"
-    ])
-
     private init() {}
 
-    struct LoadedImage {
-        let ciImage: CIImage
-        let fileSize: Int
-        let properties: [String: Any]
-        let utType: String
-    }
+    // MARK: - Load
 
-    func loadImage(from url: URL) throws -> LoadedImage {
+    func loadImage(from url: URL) throws -> ImageIOService.DecodedImage {
+        let needsScope = url.startAccessingSecurityScopedResource()
+        defer { if needsScope { url.stopAccessingSecurityScopedResource() } }
+
         guard FileManager.default.fileExists(atPath: url.path) else {
             throw FileError.fileNotFound
         }
-
         let data = try Data(contentsOf: url)
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
-            throw FileError.unsupportedFormat
-        }
-
-        guard let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
-            throw FileError.unsupportedFormat
-        }
-
-        let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] ?? [:]
-        let utTypes = CGImageSourceCopyTypeIdentifiers() as? [String] ?? []
-        let utType = utTypes.first ?? UTType.jpeg.identifier
-
-        let ciImage = CIImage(cgImage: cgImage)
-        return LoadedImage(
-            ciImage: ciImage,
-            fileSize: data.count,
-            properties: properties,
-            utType: utType
-        )
+        return try ImageIOService.shared.decode(data: data)
     }
 
-    func save(_ ciImage: CIImage, over url: URL, originalFileSize: Int, originalProperties: [String: Any], utType: String) async throws -> Int {
-        let finalData = try encodeImage(
+    // MARK: - Save (in place)
+
+    /// Overwrite the user-selected file. Uses `FileManager.replaceItem` for atomicity.
+    /// In App Sandbox, the destination `url` MUST be a user-selected URL (via NSOpenPanel
+    /// or resolved from a security-scoped bookmark).
+    func save(_ ciImage: CIImage,
+              over url: URL,
+              originalFileSize: Int,
+              originalProperties: [String: Any],
+              utType: String) async throws -> Int {
+        let needsScope = url.startAccessingSecurityScopedResource()
+        defer { if needsScope { url.stopAccessingSecurityScopedResource() } }
+
+        let data = try ImageIOService.shared.encode(
             ciImage,
             utType: utType,
             properties: originalProperties,
             targetFileSize: originalFileSize
         )
 
-        // Atomic overwrite: write to a temporary file in the same directory, then exchange.
-        let tempURL = url.deletingLastPathComponent().appendingPathComponent(url.lastPathComponent + ".tmp")
-        try finalData.write(to: tempURL, options: .atomic)
+        // Write to a temp file in the caches directory (always writable in sandbox),
+        // then atomically replace the destination.
+        let tempDir = FileManager.default.temporaryDirectory
+        let tempURL = tempDir.appendingPathComponent("masaiki-\(UUID().uuidString).tmp")
+        try data.write(to: tempURL, options: .atomic)
+        defer { try? FileManager.default.removeItem(at: tempURL) }
 
-        do {
-            var resultingURL: NSURL?
-            _ = try FileManager.default.replaceItem(
-                at: url,
-                withItemAt: tempURL,
-                backupItemName: nil,
-                options: [.usingNewMetadataOnly],
-                resultingItemURL: &resultingURL
-            )
-        } catch {
-            try? FileManager.default.removeItem(at: tempURL)
-            throw error
-        }
-
-        return finalData.count
+        var resultingURL: NSURL?
+        _ = try FileManager.default.replaceItem(
+            at: url,
+            withItemAt: tempURL,
+            backupItemName: nil,
+            options: [.usingNewMetadataOnly],
+            resultingItemURL: &resultingURL
+        )
+        return data.count
     }
 
-    private func encodeImage(_ ciImage: CIImage, utType: String, properties: [String: Any], targetFileSize: Int) throws -> Data {
-        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
-            throw FileError.renderFailed
-        }
+    // MARK: - Export copy
 
-        let data = NSMutableData()
-        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, utType as CFString, 1, nil) else {
-            throw FileError.unsupportedFormat
-        }
+    /// Export a copy of the processed image to a user-chosen directory (NSSavePanel).
+    /// Preferred flow under App Sandbox when the user did not originally choose the file.
+    func exportCopy(_ ciImage: CIImage,
+                    to url: URL,
+                    utType: String,
+                    properties: [String: Any]) throws -> Int {
+        let needsScope = url.startAccessingSecurityScopedResource()
+        defer { if needsScope { url.stopAccessingSecurityScopedResource() } }
 
-        let isJPEG = utType == UTType.jpeg.identifier
-        var mutableProperties = properties
-
-        if isJPEG {
-            let quality = findJPEGQuality(for: cgImage, utType: utType, properties: properties, targetSize: targetFileSize)
-            mutableProperties[kCGImageDestinationLossyCompressionQuality as String] = quality
-        }
-
-        CGImageDestinationAddImage(destination, cgImage, mutableProperties as CFDictionary)
-        guard CGImageDestinationFinalize(destination) else {
-            throw FileError.saveFailed
-        }
-
-        return data as Data
-    }
-
-    private func findJPEGQuality(for cgImage: CGImage, utType: String, properties: [String: Any], targetSize: Int) -> Double {
-        let minQuality: Double = 0.5
-        let maxQuality: Double = 1.0
-        let tolerance: Double = 0.05
-
-        var low = minQuality
-        var high = maxQuality
-        var bestQuality = 0.92
-        var bestDiff = Double.infinity
-
-        for _ in 0..<8 {
-            let mid = (low + high) / 2
-            if let size = try? encodedSize(for: cgImage, utType: utType, properties: properties, quality: mid) {
-                let ratio = Double(size) / Double(targetSize)
-                let diff = abs(ratio - 1.0)
-                if diff < bestDiff {
-                    bestDiff = diff
-                    bestQuality = mid
-                }
-
-                if ratio < 1.0 - tolerance {
-                    low = mid
-                } else if ratio > 1.0 + tolerance {
-                    high = mid
-                } else {
-                    return mid
-                }
-            } else {
-                break
-            }
-        }
-
-        return bestQuality
-    }
-
-    private func encodedSize(for cgImage: CGImage, utType: String, properties: [String: Any], quality: Double) throws -> Int {
-        let data = NSMutableData()
-        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, utType as CFString, 1, nil) else {
-            throw FileError.saveFailed
-        }
-        var props = properties
-        props[kCGImageDestinationLossyCompressionQuality as String] = quality
-        CGImageDestinationAddImage(destination, cgImage, props as CFDictionary)
-        guard CGImageDestinationFinalize(destination) else {
-            throw FileError.saveFailed
-        }
-        return data.length
+        let data = try ImageIOService.shared.encode(
+            ciImage,
+            utType: utType,
+            properties: properties,
+            targetFileSize: nil
+        )
+        try data.write(to: url, options: .atomic)
+        return data.count
     }
 
     enum FileError: Error, LocalizedError {
         case fileNotFound
-        case unsupportedFormat
-        case renderFailed
-        case saveFailed
+        case notWritable
 
         var errorDescription: String? {
             switch self {
-            case .fileNotFound: return "找不到文件"
-            case .unsupportedFormat: return "不支持的图片格式"
-            case .renderFailed: return "图像渲染失败"
-            case .saveFailed: return "文件保存失败"
+            case .fileNotFound: return NSLocalizedString("file.error.notfound", value: "找不到文件", comment: "")
+            case .notWritable:  return NSLocalizedString("file.error.notwritable", value: "文件不可写", comment: "")
             }
         }
     }

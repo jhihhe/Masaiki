@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- App Sandbox: required for Mac App Store -->
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+
+    <!-- User-selected file access: read+write files/folders chosen via NSOpenPanel/NSSavePanel/drag-drop -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+
+    <!-- Bookmarks so we can re-open user-chosen files across launches -->
+    <key>com.apple.security.files.bookmarks.app-scope</key>
+    <true/>
+
+    <!-- Photos library (optional: only if the user picks system Photos library entries) -->
+    <key>com.apple.security.personal-information.photos-library</key>
+    <true/>
+
+    <!-- No network: pure local processing. Do NOT add network entitlements. -->
+</dict>
+</plist>

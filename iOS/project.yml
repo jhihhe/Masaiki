@@ -1,0 +1,49 @@
+# XcodeGen spec for the Masaiki iOS app.
+# Install XcodeGen (https://github.com/yonaskolb/XcodeGen) then run:
+#   cd iOS && xcodegen generate
+# It will produce Masaiki.xcodeproj that references the shared SwiftPM MasaikiCore.
+name: Masaiki
+options:
+  minimumXcodeGenVersion: 2.38.0
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    ENABLE_HARDENED_RUNTIME: YES
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    TARGETED_DEVICE_FAMILY: "1,2"   # iPhone + iPad
+    ENABLE_BITCODE: NO
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: "1.0.0"
+
+packages:
+  MasaikiCore:
+    path: ..
+
+targets:
+  Masaiki:
+    type: application
+    platform: iOS
+    sources:
+      - path: Masaiki
+        excludes:
+          - "Resources/*.entitlements"
+    resources:
+      - Masaiki/Resources/PrivacyInfo.xcprivacy
+    info:
+      path: Masaiki/Resources/Info.plist
+    entitlements:
+      path: Masaiki/Resources/Masaiki.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.masaiki
+        PRODUCT_NAME: Masaiki
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+    dependencies:
+      - package: MasaikiCore
+        product: MasaikiCore

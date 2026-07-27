@@ -22,7 +22,8 @@ struct ContentView: View {
                 }
             }
         }
-        .navigationTitle("马赛克工具")
+        .navigationTitle("Masaiki")
+        .navigationSubtitle("心中有步兵 眼中有骑兵")
         .alert(item: $viewModel.saveResult) { result in
             Alert(
                 title: Text("保存完成"),
@@ -42,13 +43,15 @@ struct ContentView: View {
 
         for provider in providers {
             group.enter()
-            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
+            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) {
+                item, _ in
                 defer { group.leave() }
                 if let url = item as? URL {
                     urls.append(url)
                 } else if let data = item as? Data,
-                          let string = String(data: data, encoding: .utf8),
-                          let url = URL(string: string) {
+                    let string = String(data: data, encoding: .utf8),
+                    let url = URL(string: string)
+                {
                     urls.append(url)
                 }
             }

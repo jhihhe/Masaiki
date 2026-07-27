@@ -1,4 +1,6 @@
 import SwiftUI
+import AppKit
+import MasaikiCore
 
 struct ImageListView: View {
     @ObservedObject var viewModel: AppViewModel
@@ -10,9 +12,7 @@ struct ImageListView: View {
                     ImageRow(item: item, isSelected: viewModel.selectedItemID == item.id)
                         .tag(item.id)
                         .contextMenu {
-                            Button("移除") {
-                                viewModel.removeItem(item)
-                            }
+                            Button("移除") { viewModel.removeItem(item) }
                         }
                 }
             }
@@ -41,26 +41,18 @@ struct ImageRow: View {
                 .cornerRadius(6)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(item.displayName)
-                    .lineLimit(1)
-                    .font(.system(size: 12, weight: .medium))
+                Text(item.displayName).lineLimit(1).font(.system(size: 12, weight: .medium))
                 HStack(spacing: 4) {
                     if item.isProcessing {
-                        ProgressView()
-                            .controlSize(.small)
-                            .scaleEffect(0.6)
+                        ProgressView().controlSize(.small).scaleEffect(0.6)
                     }
-                    Text(statusText)
-                        .font(.caption2)
-                        .foregroundColor(statusColor)
+                    Text(statusText).font(.caption2).foregroundColor(statusColor)
                 }
             }
 
             Spacer()
 
-            Text(formattedFileSize)
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            Text(formattedFileSize).font(.caption2).foregroundColor(.secondary)
         }
         .padding(.vertical, 4)
         .background(isSelected ? Color.accentColor.opacity(0.1) : Color.clear)
@@ -69,10 +61,9 @@ struct ImageRow: View {
 
     private var thumbnail: some View {
         Group {
-            if let nsImage = ImageProcessingService.shared.render(item.processedImage, toSize: CGSize(width: 88, height: 88)) {
-                Image(nsImage: nsImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
+            if let cg = ImageProcessingService.shared.renderCGImage(item.processedImage) {
+                let ns = NSImage(cgImage: cg, size: CGSize(width: 88, height: 88))
+                Image(nsImage: ns).resizable().aspectRatio(contentMode: .fill)
             } else {
                 Color.secondary.opacity(0.2)
             }
@@ -80,25 +71,15 @@ struct ImageRow: View {
     }
 
     private var statusText: String {
-        if let error = item.errorMessage {
-            return error
-        }
-        if item.isProcessing {
-            return "处理中..."
-        }
-        if item.regions.isEmpty {
-            return "未打码"
-        }
+        if let error = item.errorMessage { return error }
+        if item.isProcessing { return "处理中..." }
+        if item.regions.isEmpty { return "未打码" }
         return "\(item.regions.count) 个区域"
     }
 
     private var statusColor: Color {
-        if item.errorMessage != nil {
-            return .red
-        }
-        if item.regions.isEmpty {
-            return .secondary
-        }
+        if item.errorMessage != nil { return .red }
+        if item.regions.isEmpty { return .secondary }
         return .green
     }
 

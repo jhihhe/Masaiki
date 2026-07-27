@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 简化的马赛克方格图标：4x4 白色圆角方块 -->
+    <group android:translateX="24" android:translateY="24">
+        <path android:fillColor="#FFFFFFFF" android:pathData="M0,0h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M16,0h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M32,0h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M48,0h12v12h-12z"/>
+
+        <path android:fillColor="#FFFFFFFF" android:pathData="M0,16h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M16,16h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M32,16h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M48,16h12v12h-12z"/>
+
+        <path android:fillColor="#FFFFFFFF" android:pathData="M0,32h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M16,32h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M32,32h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M48,32h12v12h-12z"/>
+
+        <path android:fillColor="#FFFFFFFF" android:pathData="M0,48h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M16,48h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M32,48h12v12h-12z"/>
+        <path android:fillColor="#FFFFFFFF" android:pathData="M48,48h12v12h-12z"/>
+    </group>
+</vector>
