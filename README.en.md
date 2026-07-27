@@ -2,18 +2,19 @@
 
 # Masaiki
 
-**Lightweight macOS Image Blur Tool**
+**Cross-platform Image Privacy Tool**
 
-[![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
-[![Swift](https://img.shields.io/badge/Swift-5.8-orange.svg?style=flat-square&logo=swift)](https://swift.org)
-[![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
-[![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
-[![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
+[![Version](https://img.shields.io/badge/Version-1.2.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
+[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg?style=flat-square&logo=swift)](https://swift.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9-purple.svg?style=flat-square&logo=kotlin)](https://kotlinlang.org)
+[![macOS](https://img.shields.io/badge/macOS-13.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
+[![iOS](https://img.shields.io/badge/iOS-16.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/ios)
+[![Android](https://img.shields.io/badge/Android-8.0+-3DDC84.svg?style=flat-square&logo=android)](https://www.android.com/)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-green.svg?style=flat-square)](LICENSE)
-[![Download](https://img.shields.io/badge/Download-Masaiki.dmg-purple.svg?style=flat-square)](./Masaiki.dmg)
 
 <p>
   <a href="README.zh.md">中文</a> •
+  <a href="README.en.md">English</a> •
   <a href="#features">Features</a> •
   <a href="#installation">Install</a> •
   <a href="#usage">Usage</a> •
@@ -38,7 +39,10 @@
 
 ## Screenshot
 
+### macOS
 ![App Screenshot](assets/screenshot.png)
+
+### iOS / Android
 ![iOS Preview](assets/screenshot-ios.PNG)
 
 ## Apple Vision Face Detection Flow

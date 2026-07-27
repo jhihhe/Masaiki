@@ -1,11 +1,36 @@
+<div align="center">
+
 # Masaiki
 
-跨平台图片隐私保护工具，支持 **macOS**、**iOS** 和 **Android**，提供智能人脸识别 + 手动区域马赛克/高斯模糊功能。
+**跨平台图片隐私保护工具**
+
+[![Version](https://img.shields.io/badge/Version-1.2.0-blue.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
+[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg?style=flat-square&logo=swift)](https://swift.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9-purple.svg?style=flat-square&logo=kotlin)](https://kotlinlang.org)
+[![macOS](https://img.shields.io/badge/macOS-13.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
+[![iOS](https://img.shields.io/badge/iOS-16.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/ios)
+[![Android](https://img.shields.io/badge/Android-8.0+-3DDC84.svg?style=flat-square&logo=android)](https://www.android.com/)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-green.svg?style=flat-square)](LICENSE)
+
+<p>
+  <a href="README.zh.md">中文</a> •
+  <a href="README.en.md">English</a> •
+  <a href="#功能特性">功能特性</a> •
+  <a href="#最新更新日志">更新日志</a>
+</p>
+
+</div>
 
 ---
 
+支持 **macOS**、**iOS** 和 **Android**，提供智能人脸识别 + 手动区域马赛克/高斯模糊功能。
+
 ## 界面预览
 
+### macOS
+![App Screenshot](assets/screenshot.png)
+
+### iOS / Android
 ![iOS Preview](assets/screenshot-ios.PNG)
 
 ---
