@@ -172,6 +172,9 @@ This tool is licensed under the Creative Commons Attribution-NonCommercial 4.0 I
 
 ---
 
+**Team**: Masaiki Contributors  
+**Contact**: 486956@gmail.com
+
 <div align="center">
 
 Made with ❤️ for macOS

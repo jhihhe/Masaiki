@@ -218,4 +218,4 @@ android {
 ---
 
 **制作团队**：Masaiki Contributors  
-**联系方式**：support@example.com（替换为你的真实邮箱）
+**联系方式**：486956@gmail.com

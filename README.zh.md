@@ -177,6 +177,9 @@ Face Detect  Mosaic/Blur   JPEG/PNG Save
 
 ---
 
+**制作团队**：Masaiki Contributors  
+**联系方式**：486956@gmail.com
+
 <div align="center">
 
 Made with ❤️ for macOS
