@@ -1,6 +1,6 @@
 <div align="center">
 
-# Masaiki · 马赛克工具
+# Masaiki
 
 **Lightweight macOS Image Blur Tool**
 
@@ -9,7 +9,7 @@
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-green.svg?style=flat-square)](LICENSE)
 [![Download](https://img.shields.io/badge/Download-Masaiki.dmg-purple.svg?style=flat-square)](./Masaiki.dmg)
 
 <p>
@@ -39,6 +39,7 @@
 ## Screenshot
 
 ![App Screenshot](assets/screenshot.png)
+![iOS Preview](assets/screenshot-ios.PNG)
 
 ## Apple Vision Face Detection Flow
 
@@ -98,6 +99,23 @@ swiftc -sdk $SDK -o Masaiki $(find Sources/Masaiki -name "*.swift")
 
 ## Changelog
 
+### v1.2.0 (2026-07-28)
+
+**✨ New Features**
+- **Cross-platform Rebranding & Visual Unification**: The application has been officially renamed to **Masaiki**, and the slogan unified to "心中有步兵 眼中有骑兵" across all platforms.
+- **macOS Custom Title Bar**: Redesigned the macOS interface to remove the system default title, replacing it with a custom two-line layout featuring a large bold title and a small gray subtitle.
+- **Android Quick Delete**: Optimized the thumbnail long-press interaction by removing the secondary confirmation dialog. Long-pressing now directly shows a red cross for quick deletion.
+
+**🛠 Technical Updates**
+- **Android Asynchronous Rendering Engine**: Refactored the Gaussian blur processing logic to move heavy RenderScript computations to the `Dispatchers.IO` background coroutine. This completely eliminates main thread blocking, achieving a stable 60fps with <100ms interaction latency.
+- **Android Gesture State Machine**: Deprecated conflicting independent gesture listeners in favor of a new multi-touch state machine using `awaitEachGesture`, perfectly isolating single-finger (blur selection) and two-finger (zoom/pan) events.
+
+**🐛 Bug Fixes**
+- **Android Zoomed Selection Fix**: Fixed the issue where manual blurring was impossible while the image was zoomed in.
+- **Android View Out-of-Bounds Fix**: Implemented dynamic pan boundary calculations and `clipToBounds()` to allow free panning across the full screen when zoomed in, without covering the bottom toolbar and buttons.
+- **Android Selection Coordinate Correction**: Fixed the coordinate offset issue where the selection box did not match the actual blurred area.
+- **Android Default Intensity Alignment**: Corrected the default blur intensity to 100% to match the iOS experience.
+
 ### v1.1.0 (2026-07-22)
 
 - Auto-switch preview to the last imported/dropped image
@@ -144,9 +162,9 @@ Face Detect  Mosaic/Blur   JPEG/PNG Save
 
 ---
 
-## Disclaimer
+## License
 
-This tool overwrites original files. Please make sure you have your own backups of important images before saving.
+This tool is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. Commercial use of any kind is strictly prohibited, and all uses MUST attribute the original author **Jhihhe**. See [LICENSE](./LICENSE) for details.
 
 ---
 

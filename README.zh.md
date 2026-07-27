@@ -1,6 +1,6 @@
 <div align="center">
 
-# 马赛克工具 · Masaiki
+# Masaiki
 
 **轻量级 macOS 图片打码工具**
 
@@ -9,7 +9,7 @@
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-ff69b4.svg?style=flat-square&logo=swift)](https://developer.apple.com/xcode/swiftui/)
 [![macOS](https://img.shields.io/badge/macOS-12.0+-000000.svg?style=flat-square&logo=apple)](https://www.apple.com/macos)
 [![Architecture](https://img.shields.io/badge/Architecture-x86_64-lightgrey.svg?style=flat-square)](https://github.com/jhihhe/masaiki)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-green.svg?style=flat-square)](LICENSE)
 [![Download](https://img.shields.io/badge/Download-Masaiki.dmg-purple.svg?style=flat-square)](./Masaiki.dmg)
 
 <p>
@@ -39,6 +39,7 @@
 ## 界面预览
 
 ![App Screenshot](assets/screenshot.png)
+![iOS Preview](assets/screenshot-ios.PNG)
 
 ## Apple Vision 人脸识别流程
 
@@ -71,7 +72,7 @@ flowchart LR
 ## 安装
 
 1. 下载最新版 `Masaiki.dmg`
-2. 双击挂载 DMG，将「马赛克工具」拖入「应用程序」文件夹
+2. 双击挂载 DMG，将「Masaiki」拖入「应用程序」文件夹
 3. 首次运行时若提示「无法打开」，请前往 **系统设置 → 隐私与安全性** 点击「仍要打开」
 
 ## 使用说明
@@ -102,6 +103,23 @@ swiftc -sdk $SDK -o Masaiki $(find Sources/Masaiki -name "*.swift")
 ---
 
 ## 更新日志
+
+### v1.2.0（2026-07-28）
+
+**✨ 功能新增**
+- **全平台更名与视觉统一**：应用正式更名为 **Masaiki**，各端标题及文案统一为“心中有步兵 眼中有骑兵”。
+- **macOS 自定义标题栏**：重构 macOS 端界面，移除系统默认标题，采用“大字粗体 + 灰色小字副标题”的双行自定义排版。
+- **Android 快捷删除**：缩略图长按交互优化，移除二次确认弹窗，长按后直接在缩略图右上角显示红叉，点击即可删除。
+
+**🛠 技术更新**
+- **Android 异步渲染引擎**：重构高斯模糊处理逻辑，将耗时的 RenderScript 计算迁移至 `Dispatchers.IO` 后台协程执行，彻底消除主线程阻塞，帧率稳定 60fps，操作延迟 <100ms。
+- **Android 手势状态机**：弃用容易冲突的独立手势监听，基于 `awaitEachGesture` 引入全新多点触控状态机，完美隔离单指（框选打码）与双指（缩放/平移）事件。
+
+**🐛 问题修复**
+- **Android 放大框选修复**：解决了在放大预览状态下无法进行手动打码的问题。
+- **Android 视图越界修复**：通过动态平移边界计算与 `clipToBounds()`，允许图片放大后在全屏区域自由滑动，同时避免遮挡底部工具栏与按钮。
+- **Android 选区坐标修正**：修复了框选框与实际模糊位置不匹配的坐标偏移问题。
+- **Android 默认强度对齐**：将默认模糊强度由偏低值修正为 100%，与 iOS 端体验保持一致。
 
 ### v1.1.0（2026-07-22）
 
@@ -149,9 +167,9 @@ Face Detect  Mosaic/Blur   JPEG/PNG Save
 
 ---
 
-## 免责声明
+## 许可证
 
-本工具会直接覆盖原文件，请在操作前确认已自行备份重要图片。
+本工具采用 Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) 许可证。严禁任何形式的商业用途，且所有使用场景必须署名原作者 **Jhihhe**。详见 [LICENSE](./LICENSE)。
 
 ---
 
