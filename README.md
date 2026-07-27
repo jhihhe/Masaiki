@@ -70,9 +70,9 @@
 
 | 平台 | 最低版本 | 架构支持 | 状态 |
 |------|---------|---------|------|
-| macOS | 13.0 (Ventura) | Intel + Apple Silicon | ✅ 已完成 App Store 准备 |
-| iOS | 16.0 | arm64 | ✅ 已完成 App Store 准备 |
-| Android | 8.0 (API 26) | arm64-v8a + armeabi-v7a + x86_64 | ✅ 已完成 Play Store 准备 |
+| macOS | 13.0 (Ventura) | Intel + Apple Silicon | ✅ 支持 |
+| iOS | 16.0 | arm64 | ✅ 支持 |
+| Android | 8.0 (API 26) | arm64-v8a + armeabi-v7a + x86_64 | ✅ 支持 |
 
 ---
 
@@ -111,181 +111,11 @@ masaike/
 │   └── gradle.properties
 ├── scripts/
 │   ├── build_macos.sh            # macOS 构建 + 签名 + 公证
-│   ├── build_ios.sh              # iOS Xcode Archive + App Store 导出
+│   ├── build_ios.sh              # iOS Xcode Archive 导出
 │   └── build_android.sh          # Android AAB 构建 + 签名
 ├── Package.swift                 # SwiftPM 主配置（macOS + iOS targets）
 └── README.md                     # 本文件
 ```
-
----
-
-## 构建 & 上架指南
-
-### 前置要求
-
-#### 所有平台
-- **Apple Developer 账号**（$99/年）：macOS + iOS 签名和 App Store 上架
-- **Google Play Console 账号**（$25 一次性）：Android 上架
-
-#### macOS / iOS
-- Xcode 15.0+（需完整安装，非 Command Line Tools）
-- 有效的 **开发者证书** 和 **App Store Distribution Profile**
-- 硬化运行时 + 公证（notarization）配置
-
-#### Android
-- Android Studio Hedgehog (2023.1.1+) 或独立 Gradle 8.7+
-- JDK 17
-- Android SDK 34 + Build-Tools 34.0.0
-- 上传密钥 keystore（Play App Signing 启用后自动管理）
-
----
-
-### macOS App Store
-
-#### 1. 配置签名
-
-在你的开发者账号中：
-1. **Certificates, Identifiers & Profiles** → 创建 App ID：`com.yourteam.masaiki`
-2. 创建 **Mac App Distribution** 证书并下载安装到钥匙串
-3. 创建 **Mac App Store** Provisioning Profile，包含上述 App ID 和证书
-4. 下载 profile 并双击安装
-
-#### 2. 更新 entitlements
-
-编辑 [macOS.entitlements](./macOS.entitlements)，修改 Team ID：
-
-```xml
-<key>com.apple.security.application-groups</key>
-<array>
-    <string>YOUR_TEAM_ID.com.yourteam.masaiki</string>
-</array>
-```
-
-#### 3. 构建 + 签名 + 公证
-
-```bash
-export APPLE_ID="your@apple.id"
-export TEAM_ID="YOUR_TEAM_ID"
-export KEYCHAIN_PROFILE="notarytool-profile"  # 提前用 xcrun notarytool store-credentials 创建
-
-chmod +x scripts/build_macos.sh
-./scripts/build_macos.sh
-```
-
-成功后会在 `build/macOS/` 生成 `Masaiki.pkg`。
-
-#### 4. 上传到 App Store Connect
-
-```bash
-xcrun altool --upload-package build/macOS/Masaiki.pkg \
-    --type macos \
-    --apple-id "$APPLE_ID" \
-    --password "@keychain:AC_PASSWORD"
-```
-
-然后在 [App Store Connect](https://appstoreconnect.apple.com) 创建 App 并提交审核。
-
----
-
-### iOS App Store
-
-#### 1. 配置签名（同 macOS）
-
-创建 **iOS App ID**：`com.yourteam.masaiki.ios`，生成 **iOS Distribution** 证书和 **App Store** profile。
-
-#### 2. 生成 Xcode 项目（用 XcodeGen）
-
-```bash
-cd iOS/Masaiki
-brew install xcodegen
-xcodegen
-```
-
-打开生成的 `Masaiki.xcodeproj`，在 **Signing & Capabilities** 中选择你的 Team 和 Profile。
-
-#### 3. Archive + 上传
-
-方式 A（命令行）：
-```bash
-chmod +x ../../scripts/build_ios.sh
-../../scripts/build_ios.sh
-```
-
-方式 B（Xcode GUI）：
-1. Product → Archive
-2. Window → Organizer → 选择 archive → **Distribute App** → **App Store Connect**
-
-#### 4. TestFlight 测试 + 正式发布
-
-在 App Store Connect 中提交审核。
-
----
-
-### Android Google Play
-
-#### 1. 创建上传密钥
-
-```bash
-keytool -genkey -v \
-    -keystore ~/masaiki-upload.keystore \
-    -keyalg RSA -keysize 2048 -validity 10000 \
-    -alias upload
-```
-
-记住密码和 alias，后续构建时需要。
-
-#### 2. 生成 Gradle Wrapper（如果没有）
-
-```bash
-cd android
-gradle wrapper --gradle-version 8.7 --distribution-type all
-```
-
-#### 3. 构建 AAB
-
-```bash
-export ANDROID_HOME="$HOME/Library/Android/sdk"  # 或你的 SDK 路径
-export KEYSTORE_PATH="$HOME/masaiki-upload.keystore"
-export KEYSTORE_PASSWORD="your-keystore-pass"
-export KEY_ALIAS="upload"
-export KEY_PASSWORD="your-key-pass"
-
-chmod +x ../scripts/build_android.sh
-../scripts/build_android.sh
-```
-
-输出：`android/app/build/outputs/bundle/release/app-release.aab`
-
-#### 4. 上传到 Play Console
-
-1. 登录 [Google Play Console](https://play.google.com/console)
-2. **创建应用** → 选择语言（简体中文）和免费/付费
-3. **测试 → 内部测试** → 创建版本 → 上传 `app-release.aab`
-4. 填写应用详情、截图、内容分级
-5. 提交审核
-
----
-
-## App Store / Play Store 审核要点
-
-### macOS & iOS（App Review Guidelines）
-
-- ✅ **隐私清单**：已在 `PrivacyInfo.xcprivacy` 中声明 PhotoLibrary/FileTimestamp/DiskSpace 用途
-- ✅ **权限说明**：`NSPhotoLibraryUsageDescription` / `NSPhotoLibraryAddUsageDescription`
-- ✅ **沙盒 + Hardened Runtime**：已启用所有必需 entitlements
-- ✅ **公证**：构建脚本自动调用 `notarytool`
-- ✅ **功能完整**：无依赖外部服务、无广告、无订阅 IAP（如需要请自行添加 StoreKit）
-- ⚠️ **截图与描述**：需在 App Store Connect 中手动上传（建议 6.7"、6.5"、5.5" 三种尺寸）
-
-### Android（Google Play 政策）
-
-- ✅ **targetSdkVersion 34**：满足 2024 年强制要求
-- ✅ **权限最小化**：仅读取图片（`READ_MEDIA_IMAGES` API 33+，兼容旧版 `READ_EXTERNAL_STORAGE`）
-- ✅ **Scoped Storage**：通过 MediaStore 写入 `Pictures/Masaiki`，无需 `WRITE_EXTERNAL_STORAGE`
-- ✅ **数据安全**：已在 `data_extraction_rules.xml` 禁用云备份
-- ✅ **64 位 ABI**：Gradle 默认生成 arm64-v8a + x86_64
-- ⚠️ **应用图标**：当前为占位符（蓝底白色方格），建议替换为专业设计的 1024×1024 图标
-- ⚠️ **商店详情**：需在 Play Console 填写简短/详细描述、宣传图、功能图
 
 ---
 
@@ -356,10 +186,10 @@ android {
 }
 ```
 
-### Q4：App Store Connect 拒绝：缺少隐私清单
+### Q4：构建时缺少隐私清单
 **A**：确保 `PrivacyInfo.xcprivacy` 在 Xcode 项目的 **Copy Bundle Resources** 中。XcodeGen 已自动配置。
 
-### Q5：Google Play 拒绝：声明了不使用的权限
+### Q5：Android 权限声明问题
 **A**：检查 `AndroidManifest.xml`，确保只声明 `READ_MEDIA_IMAGES` / `READ_EXTERNAL_STORAGE`，无其他危险权限。
 
 ---
